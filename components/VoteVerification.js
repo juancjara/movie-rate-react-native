@@ -23,12 +23,10 @@ class VoteVerification extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     let {movie, vote} = this.props;
     return (
       <View>
-        <Text>{movie.name}</Text>
-        <Text>{vote}</Text>
+        <Text>Are you sure to rate {vote} the movie {movie.name}</Text>
         <Button onPress={this._accept.bind(this)}>Accept</Button>
         <Button onPress={this._cancel.bind(this)}>Cancel</Button>
       </View>
