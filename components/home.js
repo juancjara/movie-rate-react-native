@@ -10,6 +10,8 @@ var {
   Image
 } = React;
 
+import Button from 'react-native-button';
+
 var Home = React.createClass({
   getInitialState() {
     return {
@@ -18,7 +20,7 @@ var Home = React.createClass({
   },
 
   _logIn() {
-    this.props.changeView('MovieList');
+    this.props.navigator.push({index: this.props.nextIndex});
   },
 
   _logOut() {
@@ -31,7 +33,7 @@ var Home = React.createClass({
 
   render() {
     return (
-        <View style={styles.container}>
+      <View style={styles.container}>
         <Image
           source={{uri: 'http://i.imgur.com/UePbdph.jpg'}}
           style={styles.logo}
@@ -45,8 +47,8 @@ var Home = React.createClass({
           <Button onPress={this._logIn}>Ingresar</Button>
           <Button onPress={this._logOut}>Salir</Button>
           <Button onPress={this._configure}>Configurar</Button>
-          </View>
         </View>
+      </View>
     );
   }
 });

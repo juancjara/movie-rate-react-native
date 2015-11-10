@@ -33,7 +33,6 @@ class MovieList extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state  = {
       searchText: '',
       dataSource: new  ListView.DataSource({
@@ -49,13 +48,16 @@ class MovieList extends React.Component {
   }
 
   _onSelect(movie) {
-    this.props.changeView('VoteView', movie);
+    this.props.navigator.push({
+      index: this.props.nextIndex,
+      passProps: {movie}
+    });
   }
 
   filter(text) {
     let matches = MOVIES.filter(({name}) => name.search(text) >= 0);
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(matches)
+      dataSource: this.state.dataSource.cloneWthRows(matches)
     });
   }
 
