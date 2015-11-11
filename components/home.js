@@ -7,7 +7,7 @@ var {
   Text,
   TextInput,
   View,
-  Image
+  Image,
 } = React;
 
 import Button from 'react-native-button';
@@ -20,7 +20,7 @@ var Home = React.createClass({
   },
 
   _logIn() {
-    this.props.navigator.push({index: this.props.nextIndex});
+    this.props.next();
   },
 
   _logOut() {

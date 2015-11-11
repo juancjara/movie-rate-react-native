@@ -25,8 +25,9 @@ class MovieList extends React.Component {
     super(props);
     this.state  = {
       searchText: '',
+      data: [],
       dataSource: new  ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2
+        rowHasChanged: (row1, row2) => true
       })
     };
   }
@@ -35,9 +36,9 @@ class MovieList extends React.Component {
     try {
       let rawMovies = await AsyncStorage.getItem('MOVIES');
       let movies = JSON.parse(rawMovies);
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(movies),
-      });
+      movies.forEach((m) => m.selected = false);
+      this.setState({data: movies});
+      this.updateListView(movies);
     } catch(error) {
       console.log(error.message);
     }
@@ -47,22 +48,36 @@ class MovieList extends React.Component {
     this._loadMovies().done();
   }
 
+  _toggleSwitch(checked, name) {
+    let data = this.state.data.slice();
+    data.forEach((m) => {
+      if (m.name === name) {
+        m.selected = checked;
+      }
+    });
+    let matches = data.filter((movie) => movie.name.search(this.state.searchText) >= 0);
+    this.setState({data});
+    this.updateListView(matches);
+  }
+
   _onSelect(movie) {
     if (Date.now() > movie.endTime) {
       ToastAndroid.show('Vote time ended', ToastAndroid.SHORT);
     } else {
-      this.props.navigator.push({
-        index: this.props.nextIndex,
-        passProps: {movie}
-      });
+      this.props.next({movie});
     }
   }
 
-  filter(text) {
-    let matches = MOVIES.filter(({name}) => name.search(text) >= 0);
+  updateListView(newRows) {
     this.setState({
-      dataSource: this.state.dataSource.cloneWthRows(matches)
+      dataSource: this.state.dataSource.cloneWithRows(newRows),
     });
+  }
+
+  filter(text) {
+    let matches = this.state.data.filter(({name}) => name.search(text) >= 0);
+    this.setState({searchText: text});
+    this.updateListView(matches);
   }
 
   render() {
@@ -72,7 +87,7 @@ class MovieList extends React.Component {
           <Text>Movie list</Text>
           <Button>Upload votes</Button>
         </View>
-        <MovieSearch filter={this.filter} />
+        <MovieSearch filter={this.filter.bind(this)} />
         <ListView
           dataSource={this.state.dataSource}
           renderRow={this.renderMovie.bind(this)}
@@ -106,13 +121,17 @@ class MovieList extends React.Component {
 
   renderMovie(movie) {
     return (
-      <TouchableHighlight onPress={this._onSelect.bind(this, movie)}>
-        <View style={styles.movieContainer}>
-          <SwitchAndroid value={false}/>
-          {this.renderMovieDetail(movie)}
-          {this.renderVoteInfo(movie)}
-        </View>
-      </TouchableHighlight>
+      <View>
+        <SwitchAndroid
+          onValueChange={(value) => this._toggleSwitch(value, movie.name)}
+          value={movie.selected}/>
+        <TouchableHighlight onPress={this._onSelect.bind(this, movie)}>
+          <View style={styles.movieContainer}>
+            {this.renderMovieDetail(movie)}
+            {this.renderVoteInfo(movie)}
+          </View>
+        </TouchableHighlight>
+      </View>
     );
   }
 };

@@ -19,15 +19,11 @@ const options = [
 ];
 
 class VoteView extends React.Component{
-    _onSelect(option) {
-      console.log('option', option);
-      this.props.navigator.push({
-        index: this.props.nextIndex,
-        passProps: {
-          movie: this.props.movie,
-          vote: option,
-        }
-      });
+  _onSelect(option) {
+    this.props.next({
+      movie: this.props.movie,
+      vote: option,
+    });
   }
 
   renderOptions() {
