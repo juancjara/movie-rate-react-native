@@ -1,10 +1,13 @@
 'use strict';
 
 import React from 'react-native';
+import Button from 'react-native-button';
 
 import MovieSearch from './movieSearch';
 
 const {
+  SwitchAndroid,
+  AsyncStorage,
   ListView,
   AppRegistry,
   StyleSheet,
@@ -13,21 +16,8 @@ const {
   View,
   Image,
   TouchableHighlight,
+  ToastAndroid,
 } = React;
-
-
-let MOVIES = [
-  {name: 'ggwp', date: '123 34 ', startTime: '15:00:00',
-   room: 5, place: 'san borja', numVotes: 0, numSend: 0,
-   status: 'finalizado',},
-  {name: 'ggwp2', date: '123 34 ', startTime: '15:00:00',
-   room: 5, place: 'san borja', numVotes: 0, numSend: 0,
-   status: 'finalizado',},
-  {name: 'test', date: '123 34 ', startTime: '15:00:00',
-   room: 5, place: 'san borja', numVotes: 0, numSend: 0,
-   status: 'finalizado',},
-];
-
 
 class MovieList extends React.Component {
 
@@ -41,17 +31,31 @@ class MovieList extends React.Component {
     };
   }
 
+  async _loadMovies() {
+    try {
+      let rawMovies = await AsyncStorage.getItem('MOVIES');
+      let movies = JSON.parse(rawMovies);
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(movies),
+      });
+    } catch(error) {
+      console.log(error.message);
+    }
+  }
+
   componentDidMount() {
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(MOVIES),
-    });
+    this._loadMovies().done();
   }
 
   _onSelect(movie) {
-    this.props.navigator.push({
-      index: this.props.nextIndex,
-      passProps: {movie}
-    });
+    if (Date.now() > movie.endTime) {
+      ToastAndroid.show('Vote time ended', ToastAndroid.SHORT);
+    } else {
+      this.props.navigator.push({
+        index: this.props.nextIndex,
+        passProps: {movie}
+      });
+    }
   }
 
   filter(text) {
@@ -66,6 +70,7 @@ class MovieList extends React.Component {
       <View>
         <View style={styles.oneColumn}>
           <Text>Movie list</Text>
+          <Button>Upload votes</Button>
         </View>
         <MovieSearch filter={this.filter} />
         <ListView
@@ -88,7 +93,8 @@ class MovieList extends React.Component {
     );
   }
 
-  renderVoteInfo({numVotes, numSend, status}) {
+  renderVoteInfo({numVotes, numSend, endTime}) {
+    let status = Date.now() < endTime? 'In progress': 'Ended';
     return (
       <View style={styles.oneColumn}>
         <Text>{numVotes}</Text>
@@ -100,11 +106,11 @@ class MovieList extends React.Component {
 
   renderMovie(movie) {
     return (
-        <TouchableHighlight onPress={this._onSelect.bind(this, movie)}>
+      <TouchableHighlight onPress={this._onSelect.bind(this, movie)}>
         <View style={styles.movieContainer}>
-          <Text>X</Text>
+          <SwitchAndroid value={false}/>
           {this.renderMovieDetail(movie)}
-      {this.renderVoteInfo(movie)}
+          {this.renderVoteInfo(movie)}
         </View>
       </TouchableHighlight>
     );

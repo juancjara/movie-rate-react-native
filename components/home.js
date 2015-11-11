@@ -44,9 +44,8 @@ var Home = React.createClass({
             value={this.state.userID}
             onChangeText={(userID) => this.setState({userID})}
           />
-          <Button onPress={this._logIn}>Ingresar</Button>
-          <Button onPress={this._logOut}>Salir</Button>
-          <Button onPress={this._configure}>Configurar</Button>
+          <Button onPress={this._logIn}>Login</Button>
+          <Button onPress={this._configure}>Configuration</Button>
         </View>
       </View>
     );

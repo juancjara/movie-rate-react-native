@@ -1,12 +1,15 @@
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
+
  */
 'use strict';
 
 import React from 'react-native';
 
 const {
+  ToastAndroid,
+  AsyncStorage,
   Navigator,
   AppRegistry,
   StyleSheet,
@@ -63,5 +66,19 @@ class movieReactNative extends React.Component {
     );
   }
 };
+let data = [
+  {name: 'name 1', date: '123 34 ', startTime: '15:00:00',
+   room: 5, place: 'san borja', numVotes: 0, numSend: 0,
+   endTime: Date.now(),},
+  {name: 'ggwp2', date: '123 34 ', startTime: '15:00:00',
+   room: 5, place: 'san borja', numVotes: 0, numSend: 0,
+   endTime: Date.now() + 100000,},
+  {name: 'test', date: '123 34 ', startTime: '15:00:00',
+   room: 5, place: 'san borja', numVotes: 0, numSend: 0,
+   endTime: Date.now() + 200000,},
+];
+
+AsyncStorage.setItem('MOVIES', JSON.stringify(data), (error) => {
+});
 
 AppRegistry.registerComponent('movieReactNative', () => movieReactNative);
