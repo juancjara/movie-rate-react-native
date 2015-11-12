@@ -37,11 +37,26 @@ class MovieList extends React.Component {
       let rawMovies = await AsyncStorage.getItem('MOVIES');
       let movies = JSON.parse(rawMovies);
       movies.forEach((m) => m.selected = false);
-      this.setState({data: movies});
       this.updateListView(movies);
     } catch(error) {
       console.log(error.message);
     }
+  }
+
+  _sendData() {
+    let data = this.state.data;
+    let rows = data
+     .filter(({selected}) => selected)
+     .length;
+    ToastAndroid.show(`${rows} rows sent.`, ToastAndroid.SHORT);
+
+    data.forEach((movie) => {
+      if (movie.selected) {
+        movie.selected = false;
+        movie.numSent++;
+      }
+    });
+    this.updateListView(data);
   }
 
   componentDidMount() {
@@ -49,15 +64,13 @@ class MovieList extends React.Component {
   }
 
   _toggleSwitch(checked, name) {
-    let data = this.state.data.slice();
+    let data = this.state.data;
     data.forEach((m) => {
       if (m.name === name) {
         m.selected = checked;
       }
     });
-    let matches = data.filter((movie) => movie.name.search(this.state.searchText) >= 0);
-    this.setState({data});
-    this.updateListView(matches);
+    this.updateListView(data);
   }
 
   _onSelect(movie) {
@@ -69,15 +82,20 @@ class MovieList extends React.Component {
   }
 
   updateListView(newRows) {
+    let matches = newRows.filter(({name}) => {
+      return name.search(this.state.searchText) >= 0
+    });
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(newRows),
+      data: newRows,
+      dataSource: this.state.dataSource.cloneWithRows(matches),
     });
   }
 
   filter(text) {
-    let matches = this.state.data.filter(({name}) => name.search(text) >= 0);
-    this.setState({searchText: text});
-    this.updateListView(matches);
+    this.setState({searchText: text},
+                  () => {
+                    this.updateListView(this.state.data);
+                  });
   }
 
   render() {
@@ -85,7 +103,9 @@ class MovieList extends React.Component {
       <View>
         <View style={styles.oneColumn}>
           <Text>Movie list</Text>
-          <Button>Upload votes</Button>
+          <Button onPress={this._sendData.bind(this)}>
+            Upload votes
+          </Button>
         </View>
         <MovieSearch filter={this.filter.bind(this)} />
         <ListView
@@ -108,12 +128,12 @@ class MovieList extends React.Component {
     );
   }
 
-  renderVoteInfo({numVotes, numSend, endTime}) {
+  renderVoteInfo({numVotes, numSent, endTime}) {
     let status = Date.now() < endTime? 'In progress': 'Ended';
     return (
       <View style={styles.oneColumn}>
-        <Text>{numVotes}</Text>
-        <Text>{numSend}</Text>
+        <Text>num votes {numVotes}</Text>
+        <Text>num sent {numSent}</Text>
         <Text>{status}</Text>
       </View>
     );

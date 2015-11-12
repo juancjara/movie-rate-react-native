@@ -55,7 +55,10 @@ class movieReactNative extends React.Component {
       return <VoteView next={next(3)} {...route.passProps} />
     case 3:
       return <VoteVerification
-               next = {() => navigator.pop()}
+               next = {() => {
+                 navigator.replaceAtIndex({index: 1}, 1);
+                 navigator.pop();
+               }}
                {...route.passProps}/>;
     default: return null;
     }
@@ -64,7 +67,7 @@ class movieReactNative extends React.Component {
   render() {
     return (
       <Navigator
-        initialRoute = {{index: 1}}
+        initialRoute = {{index: 0}}
         renderScene = {this._renderScene.bind(this)}/>
     );
   }
@@ -72,13 +75,13 @@ class movieReactNative extends React.Component {
 
 let data = [
   {name: 'name1', date: '123 34 ', startTime: '15:00:00',
-   room: 5, place: 'san borja', numVotes: 0, numSend: 0,
+   room: 5, place: 'san borja', numVotes: 2, numSent: 0,
    endTime: Date.now(),},
   {name: 'name2', date: '123 34 ', startTime: '15:00:00',
-   room: 5, place: 'san borja', numVotes: 0, numSend: 0,
+   room: 5, place: 'san borja', numVotes: 0, numSent: 0,
    endTime: Date.now() + 100000,},
   {name: 'test', date: '123 34 ', startTime: '15:00:00',
-   room: 5, place: 'san borja', numVotes: 0, numSend: 0,
+   room: 5, place: 'san borja', numVotes: 0, numSent: 0,
    endTime: Date.now() + 200000,},
 ];
 
