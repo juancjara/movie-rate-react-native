@@ -7,15 +7,14 @@ const {
   Image,
   TouchableHighlight,
   StyleSheet,
-  Modal,
 } = React;
 
 const options = [
-  {image: '', text: 'excelente'},
-  {image: '', text: 'muy buena'},
-  {image: '', text: 'buena'},
-  {image: '', text: 'regular'},
-  {image: '', text: 'mala'},
+  {image: '', text: 'Awesome'},
+  {image: '', text: 'Very good'},
+  {image: '', text: 'Good'},
+  {image: '', text: 'Meh'},
+  {image: '', text: 'Terrible'},
 ];
 
 class VoteView extends React.Component{

@@ -36,7 +36,7 @@ class VoteVerification extends React.Component {
   }
 
   render() {
-    let {movie, vote} = this.props
+    let {movie, vote} = this.props;
     return (
       <View>
         <Text>Are you sure to rate {vote} the movie {movie.name}</Text>
