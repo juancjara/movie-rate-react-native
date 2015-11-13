@@ -29,7 +29,6 @@ export default MovieActions = {
             movies: JSON.parse(rawMovies),
           },
         });
-        createNotification('data created');
       });
 
     } catch(error) {
