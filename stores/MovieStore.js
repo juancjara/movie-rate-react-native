@@ -29,7 +29,14 @@ class MovieStore extends FluxStore {
     }
   }
 
-  _generateVote() {
+  _generateVote({movie}) {
+    this._movies.forEach((m) => {
+      if (m.name === movie.name) {
+        m.numVotes++;
+      }
+    });
+    //TODO
+    //save movie after update
   }
 
   _sendVotes() {

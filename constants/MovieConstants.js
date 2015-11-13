@@ -4,3 +4,4 @@ export default {
   TOGGLE_SELECTION: 'TOGGLE_SELECTION',
   SEND_VOTES: 'SEND_VOTES',
 };
+

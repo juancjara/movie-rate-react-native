@@ -3,6 +3,7 @@ import {
   INIT_DATA,
   TOGGLE_SELECTION,
   SEND_VOTES,
+  VOTE,
 } from '../constants/MovieConstants';
 
 
@@ -29,5 +30,15 @@ export default MovieActions = {
       type: SEND_VOTES,
     });
   },
+
+  vote(movie, vote) {
+    AppDispatcher.dispatch({
+      type: VOTE,
+      payload: {
+        movie: movie,
+        vote: vote,
+      },
+    });
+  }
 
 };

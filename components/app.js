@@ -49,7 +49,6 @@ class MovieReactNative extends React.Component {
     case 3:
       return <VoteVerification
       next = {() => {
-        navigator.replaceAtIndex({index: 1}, 1);
         navigator.pop();
       }}
       {...route.passProps}/>;
