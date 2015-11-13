@@ -42,7 +42,6 @@ class MovieReactNative extends React.Component {
     switch(route.index) {
     case 0:
       return <Home next={next(1)}/>;
-      v
     case 1:
       return <MovieList next={next(2)}/>;
     case 2:

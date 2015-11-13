@@ -3,6 +3,8 @@
 import React from 'react-native';
 import Button from 'react-native-button';
 
+import MovieStore from '../stores/MovieStore';
+import MovieActions from '../actions/MovieActions';
 import MovieSearch from './movieSearch';
 
 const {
@@ -23,6 +25,7 @@ class MovieList extends React.Component {
 
   constructor(props) {
     super(props);
+    this._onChange = this._onChange.bind(this);
     this.state  = {
       searchText: '',
       data: [],
@@ -60,7 +63,16 @@ class MovieList extends React.Component {
   }
 
   componentDidMount() {
-    this._loadMovies().done();
+    MovieStore.addChangeListener(this._onChange);
+    MovieActions.loadData();
+  }
+
+  componentWillUnmount() {
+    MovieStore.removeChangeListener(this._onChange);
+  }
+
+  _onChange() {
+    this.updateListView(MovieStore.getState());
   }
 
   _toggleSwitch(checked, name) {

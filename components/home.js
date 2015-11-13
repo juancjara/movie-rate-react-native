@@ -11,24 +11,27 @@ var {
 } = React;
 
 import Button from 'react-native-button';
+import LoginActions from '../actions/LoginActions';
+import LoginStore from '../stores/LoginStore';
 
 var Home = React.createClass({
   getInitialState() {
     return {
-      userID: ''
+      user: ''
     };
   },
 
   _logIn() {
+    LoginActions.loginUser(this.state.user);
     this.props.next();
   },
 
   _logOut() {
-    this.setState({userID: 'logOut'});
+    this.setState({user: 'logOut'});
   },
 
   _configure() {
-    this.setState({userID: 'configure'});
+    this.setState({user: 'configure'});
   },
 
   render() {
@@ -41,7 +44,7 @@ var Home = React.createClass({
         <View style={styles.rightContainer}>
           <Text>Por favor ingresar su ID de usuario</Text>
           <TextInput
-            value={this.state.userID}
+            value={this.state.user}
             onChangeText={(userID) => this.setState({userID})}
           />
           <Button onPress={this._logIn}>Login</Button>

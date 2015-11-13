@@ -7,7 +7,6 @@
 
 import {AsyncStorage, AppRegistry} from 'react-native';
 import MovieReactNative from './components/app';
-console.log(MovieReactNative);
 
 let data = [
   {name: 'name1', date: '123 34 ', startTime: '15:00:00',
