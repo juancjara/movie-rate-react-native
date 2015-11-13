@@ -8,7 +8,6 @@ import MovieActions from '../actions/MovieActions';
 const {
   View,
   Text,
-  ToastAndroid,
 } = React;
 
 class VoteVerification extends React.Component {
@@ -16,7 +15,6 @@ class VoteVerification extends React.Component {
   _accept() {
     let {movie, vote} = this.props;
     MovieActions.vote(movie, vote);
-    ToastAndroid.show('Movie Rated. Thanks', ToastAndroid.SHORT);
     this.props.next();
   }
 

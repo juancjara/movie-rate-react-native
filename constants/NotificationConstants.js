@@ -1,0 +1,3 @@
+export default {
+  CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
+};

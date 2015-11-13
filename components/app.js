@@ -18,6 +18,7 @@ import Home from './home';
 import MovieList from './movieList';
 import VoteView from './voteView';
 import VoteVerification from './voteVerification';
+import NotificationStore from '../stores/NotificationStore';
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -29,6 +30,33 @@ BackAndroid.addEventListener('hardwareBackPress', () => {
 });
 
 class MovieReactNative extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this._onChange = this._onChange.bind(this);
+    this.state = {
+      notification: NotificationStore.getState(),
+    };
+  }
+
+  componentDidMount() {
+    NotificationStore.addChangeListener(this._onChange);
+  }
+
+  componentWillUnmount() {
+    NotificationStore.removeChangeListener(this._onChange);
+  }
+
+  _onChange() {
+    let text = NotificationStore.getState();
+    this.setState({
+      notification: text,
+    });
+
+    if (text.length) {
+      ToastAndroid.show(text, ToastAndroid.SHORT);
+    }
+  }
 
   _renderScene(route, navigator) {
     _navigator = navigator;
@@ -59,8 +87,8 @@ class MovieReactNative extends React.Component {
   render() {
     return (
         <Navigator
-      initialRoute = {{index: 0}}
-      renderScene = {this._renderScene.bind(this)}/>
+          initialRoute = {{index: 0}}
+          renderScene = {this._renderScene.bind(this)}/>
     );
   }
 };

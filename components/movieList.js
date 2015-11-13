@@ -50,7 +50,6 @@ class MovieList extends React.Component {
 
   _sendData() {
     MovieActions.sendVotes();
-    ToastAndroid.show('Votes sent.', ToastAndroid.SHORT);
   }
 
   _toggleSwitch(checked, name) {

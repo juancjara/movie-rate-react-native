@@ -7,7 +7,6 @@ import {
   TOGGLE_SELECTION,
   SEND_VOTES,
 } from '../constants/MovieConstants';
-import {AsyncStorage} from 'react-native';
 
 class MovieStore extends FluxStore {
 
@@ -17,16 +16,8 @@ class MovieStore extends FluxStore {
     this.subscribe(() => this._registerToActions.bind(this));
   }
 
-  _loadInitialData() {
-    try {
-      AsyncStorage.getItem('MOVIES', (err, rawMovies) => {
-        this._movies = JSON.parse(rawMovies);
-        this._movies.forEach((m) => m.selected = false);
-        this.emitChange();
-      });
-    } catch(error) {
-      console.log(error.message);
-    }
+  _loadInitialData({movies}) {
+    this._movies = movies;
   }
 
   _generateVote({movie}) {
@@ -59,7 +50,7 @@ class MovieStore extends FluxStore {
   _registerToActions(action) {
     switch(action.type) {
     case INIT_DATA:
-      this._loadInitialData();
+      this._loadInitialData(action.payload);
       break;
     case VOTE:
       this._generateVote(action.payload);
@@ -70,6 +61,8 @@ class MovieStore extends FluxStore {
     case SEND_VOTES:
       this._sendVotes();
       break;
+    default:
+      return;
     }
     this.emitChange();
   }
