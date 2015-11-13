@@ -28,38 +28,11 @@ class MovieList extends React.Component {
     this._onChange = this._onChange.bind(this);
     this.state  = {
       searchText: '',
-      data: [],
+      movies : '',
       dataSource: new  ListView.DataSource({
         rowHasChanged: (row1, row2) => true
-      })
+      }),
     };
-  }
-
-  async _loadMovies() {
-    try {
-      let rawMovies = await AsyncStorage.getItem('MOVIES');
-      let movies = JSON.parse(rawMovies);
-      movies.forEach((m) => m.selected = false);
-      this.updateListView(movies);
-    } catch(error) {
-      console.log(error.message);
-    }
-  }
-
-  _sendData() {
-    let data = this.state.data;
-    let rows = data
-     .filter(({selected}) => selected)
-     .length;
-    ToastAndroid.show(`${rows} rows sent.`, ToastAndroid.SHORT);
-
-    data.forEach((movie) => {
-      if (movie.selected) {
-        movie.selected = false;
-        movie.numSent++;
-      }
-    });
-    this.updateListView(data);
   }
 
   componentDidMount() {
@@ -75,14 +48,13 @@ class MovieList extends React.Component {
     this.updateListView(MovieStore.getState());
   }
 
+  _sendData() {
+    MovieActions.sendVotes();
+    ToastAndroid.show('Votes sent.', ToastAndroid.SHORT);
+  }
+
   _toggleSwitch(checked, name) {
-    let data = this.state.data;
-    data.forEach((m) => {
-      if (m.name === name) {
-        m.selected = checked;
-      }
-    });
-    this.updateListView(data);
+    MovieActions.toggleSelection(checked, name);
   }
 
   _onSelect(movie) {
@@ -95,10 +67,10 @@ class MovieList extends React.Component {
 
   updateListView(newRows) {
     let matches = newRows.filter(({name}) => {
-      return name.search(this.state.searchText) >= 0
+      return name.search(this.state.searchText) >= 0;
     });
     this.setState({
-      data: newRows,
+      movies: newRows,
       dataSource: this.state.dataSource.cloneWithRows(matches),
     });
   }
@@ -106,7 +78,7 @@ class MovieList extends React.Component {
   filter(text) {
     this.setState({searchText: text},
                   () => {
-                    this.updateListView(this.state.data);
+                    this.updateListView(this.state.movies);
                   });
   }
 
