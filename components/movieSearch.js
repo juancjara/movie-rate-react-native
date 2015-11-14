@@ -22,7 +22,7 @@ class MovieSearch extends React.Component {
   render() {
     return (
       <TextInput
-        placeholder='search by movie name'
+        placeholder='Search movie by name'
         onChangeText={this._onChange.bind(this)}>
         {this.state.searchText}
       </TextInput>

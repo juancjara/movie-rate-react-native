@@ -92,6 +92,7 @@ class MovieList extends React.Component {
         </View>
         <MovieSearch filter={this.filter.bind(this)} />
         <ListView
+          renderSeparator={() => <View style={styles.separator}/>}
           dataSource={this.state.dataSource}
           renderRow={this.renderMovie.bind(this)}
         />
@@ -99,32 +100,60 @@ class MovieList extends React.Component {
     );
   }
 
-  renderMovieDetail({name, date, startTime, room, place}) {
+  renderRow({label, content}, idx) {
+    return (
+      <View style={styles.row} key={idx}>
+        <Text>{`${label}: ${content}`}</Text>
+      </View>
+    );
+  }
+
+  renderMovieDetail({name, date, startTime, theater, place}) {
+    var data = [{
+      label: 'Name', content: name,
+    }, {
+      label: 'Date', content: date,
+    }, {
+      label: 'Start time', content: startTime,
+    }, {
+      label: 'Theater', content: theater,
+    }, {
+      label: 'Location', content: place,
+    }];
+
     return (
       <View style={styles.oneColumn}>
-        <Text>{name}</Text>
-        <Text>{date}</Text>
-        <Text>{startTime}</Text>
-        <Text>{room}</Text>
-        <Text>{place}</Text>
+        {data.map(this.renderRow)}
       </View>
     );
   }
 
   renderVoteInfo({numVotes, numSent, endTime}) {
-    let status = Date.now() < endTime? 'In progress': 'Ended';
+    let inProgress = Date.now() < endTime;
+    let status = inProgress? 'In progress': 'Ended';
+    let bgColor = {
+      textAlign: 'center',
+      color: 'white',
+      paddingLeft: 5,
+      paddingRight: 5,
+      backgroundColor: inProgress? 'green': 'red',
+    };
+    var data = [{
+      label: '# votes', content: numVotes,
+    }, {
+      label: '# sent', content: numSent,
+    }];
     return (
       <View style={styles.oneColumn}>
-        <Text>num votes {numVotes}</Text>
-        <Text>num sent {numSent}</Text>
-        <Text>{status}</Text>
+        {data.map(this.renderRow)}
+        <Text style={bgColor}>{status}</Text>
       </View>
     );
   }
 
   renderMovie(movie) {
     return (
-      <View>
+      <View style={styles.row}>
         <SwitchAndroid
           onValueChange={(value) => this._toggleSwitch(value, movie.name)}
           value={movie.selected}/>
@@ -139,7 +168,19 @@ class MovieList extends React.Component {
   }
 };
 
+
+
 var styles = {
+  bg: {
+    backgroundColor: 'red',
+  },
+  column: {
+    flexDirection: 'column',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
   movieContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -147,9 +188,16 @@ var styles = {
     justifyContent: 'center'
   },
   oneColumn: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    flexDirection: 'column',
     flex: 1,
-    marginLeft: 10
-  }
+    marginLeft: 10,
+  },
+  separator: {
+    height: 2,
+    backgroundColor: 'black',
+  },
 };
 
 export default MovieList;
