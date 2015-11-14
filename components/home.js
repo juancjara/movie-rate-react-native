@@ -36,19 +36,21 @@ var Home = React.createClass({
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, styles.horizontalCenter]}>
         <Image
           source={{uri: 'http://i.imgur.com/UePbdph.jpg'}}
           style={styles.logo}
         />
         <View style={styles.rightContainer}>
-          <Text>Por favor ingresar su ID de usuario</Text>
+          <Text style={styles.title}>Por favor ingresar su ID de usuario</Text>
           <TextInput
             value={this.state.user}
             onChangeText={(userID) => this.setState({userID})}
           />
-          <Button onPress={this._logIn}>Login</Button>
-          <Button onPress={this._configure}>Configuration</Button>
+          <View style={styles.horizontalCenter}>
+            <Button onPress={this._logIn}>Login</Button>
+            <Button onPress={this._configure}>Configuration</Button>
+          </View>
         </View>
       </View>
     );
@@ -56,20 +58,25 @@ var Home = React.createClass({
 });
 
 var styles = {
-  logo: {
-    width: 53,
-    height: 81
+  horizontalCenter: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   container: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    backgroundColor: '#F5FCFF',
+  },
+  logo: {
+    width: 53,
+    height: 81,
   },
   rightContainer: {
-    flex: 1
-  }
-}
+    width: 250,
+  },
+  title: {
+    textAlign: 'center',
+  },
+};
 
 module.exports = Home;
