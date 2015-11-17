@@ -83,7 +83,7 @@ class MovieList extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <View style={styles.oneColumn}>
           <Text>Movie list</Text>
           <Button onPress={this._sendData.bind(this)}>
@@ -92,10 +92,10 @@ class MovieList extends React.Component {
         </View>
         <MovieSearch filter={this.filter.bind(this)} />
         <ListView
+          style={styles.list}
           renderSeparator={() => <View style={styles.separator}/>}
           dataSource={this.state.dataSource}
-          renderRow={this.renderMovie.bind(this)}
-        />
+          renderRow={this.renderMovie.bind(this)} />
       </View>
     );
   }
@@ -170,7 +170,7 @@ class MovieList extends React.Component {
 
 
 
-var styles = {
+let styles = {
   bg: {
     backgroundColor: 'red',
   },
@@ -191,12 +191,15 @@ var styles = {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     flexDirection: 'column',
-    flex: 1,
     marginLeft: 10,
   },
   separator: {
     height: 2,
     backgroundColor: 'black',
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'column',
   },
 };
 
