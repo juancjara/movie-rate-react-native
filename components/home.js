@@ -42,14 +42,14 @@ var Home = React.createClass({
           style={styles.logo}
         />
         <View style={styles.rightContainer}>
-          <Text style={styles.title}>Por favor ingresar su ID de usuario</Text>
+          <Text style={styles.title}>Please login with your user ID</Text>
           <TextInput
             value={this.state.user}
             onChangeText={(userID) => this.setState({userID})}
           />
           <View style={styles.horizontalCenter}>
             <Button onPress={this._logIn}>Login</Button>
-            <Button onPress={this._configure}>Configuration</Button>
+            <Button onPress={this._configure}>Settings</Button>
           </View>
         </View>
       </View>
