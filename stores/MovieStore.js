@@ -1,5 +1,6 @@
 'use strict'
 
+import {Map, List,} from 'immutable';
 import FluxStore from './FluxStore';
 import {
   INIT_DATA,
@@ -12,39 +13,41 @@ class MovieStore extends FluxStore {
 
   constructor() {
     super();
-    this._movies = [];
+    this._movies = List();
     this.subscribe(() => this._registerToActions.bind(this));
   }
 
   _loadInitialData({movies}) {
-    this._movies = movies;
+    this._movies = List.fromJS(movies);
   }
 
   _generateVote({movie}) {
-    this._movies.forEach((m) => {
-      if (m.name === movie.name) {
-        m.numVotes++;
-      }
-    });
+    var idx= this._movies
+      .findIndex(m => m.get('name ')=== movie.name);
+
+    this._movies = this._movies
+      .updateIn([idx, 'numVotes'], votes => votes++);
     //TODO
     //save movie after update
   }
 
   _sendVotes() {
-    this._movies.forEach((movie) => {
-      if (movie.selected) {
-        movie.selected = false;
-        movie.numSent++;
-      }
-    });
+
+    this._movies = this._movies
+      .map((movie) => {
+        if (movie.get('selected')) {
+          movie = movie.updateIn(['numSent'], n => n + 1);
+        }
+        return movie;
+      });
   }
 
   _toggleSelection({checked, name}) {
-    this._movies.forEach((m) => {
-      if (m.name === name) {
-        m.selected = checked;
-      }
-    });
+    var idx = this._movies
+      .findIndex(m => m.get('name') === name);
+
+    this._movies = this._movies
+      .setIn([idx, 'selected'], checked);
   }
 
   _registerToActions(action) {
@@ -68,7 +71,7 @@ class MovieStore extends FluxStore {
   }
 
   getState() {
-   return this._movies;
+    return this._movies;
   }
 
 }
