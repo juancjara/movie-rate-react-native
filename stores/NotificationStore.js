@@ -2,21 +2,22 @@
 
 import FluxStore from './FluxStore';
 import {CREATE_NOTIFICATION} from '../constants/NotificationConstants';
+import {Map} from 'immutable';
 
 class NotificationStore extends FluxStore {
 
   constructor() {
     super();
     this.subscribe(() => this._registerToActions.bind(this));
-    this._message = '';
+    this.state = Map({message: ''});
   }
 
   getState() {
-    return this._message;
+    return this.state;
   }
 
   _createNotification({message}) {
-    this._message = message;
+    this.state = this.state.merge({message});
   }
 
   _registerToActions(action) {

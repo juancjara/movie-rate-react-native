@@ -1,4 +1,5 @@
 import React from 'react-native';
+import {Map} from 'immutable';
 
 const {
   ToastAndroid,
@@ -12,7 +13,6 @@ const {
   Image,
   BackAndroid,
 } = React;
-
 
 import Home from './home';
 import MovieList from './movieList';
@@ -48,14 +48,9 @@ class MovieReactNative extends React.Component {
   }
 
   _onChange() {
-    let text = NotificationStore.getState();
-    this.setState({
-      notification: text,
-    });
-
-    if (text.length) {
-      ToastAndroid.show(text, ToastAndroid.SHORT);
-    }
+    let notification = NotificationStore.getState();
+    this.setState({ notification});
+    ToastAndroid.show(notification.get('message'), ToastAndroid.SHORT);
   }
 
   _renderScene(route, navigator) {

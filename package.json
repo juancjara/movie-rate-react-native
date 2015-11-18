@@ -8,6 +8,7 @@
   "dependencies": {
     "events": "^1.1.0",
     "flux": "^2.1.1",
+    "immutable": "^3.7.5",
     "react-native": "^0.14.1",
     "react-native-button": "^1.2.1"
   }
