@@ -10,6 +10,7 @@ const {
 class MovieSearch extends React.Component {
   constructor(props) {
     super(props);
+    this.shouldComponentUpdate = React.addons.PureRenderMixin.shouldComponentUpdate.bind(this);
     this.state = {
       data: Map({searchText: ''}),
     };

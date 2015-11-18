@@ -34,6 +34,7 @@ class MovieReactNative extends React.Component {
   constructor(props) {
     super(props);
     this._onChange = this._onChange.bind(this);
+    this.shouldComponentUpdate = React.addons.PureRenderMixin.shouldComponentUpdate.bind(this);
     this.state = {
       notification: NotificationStore.getState(),
     };
@@ -82,7 +83,7 @@ class MovieReactNative extends React.Component {
   render() {
     return (
         <Navigator
-          initialRoute = {{index: 1}}
+          initialRoute = {{index: 0}}
           renderScene = {this._renderScene.bind(this)}/>
     );
   }
