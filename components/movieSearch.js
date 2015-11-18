@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react-native';
+import {Map} from 'immutable';
 
 const {
   TextInput,
@@ -10,12 +11,12 @@ class MovieSearch extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchText: '',
+      data: Map({searchText: ''}),
     };
   }
 
   _onChange(searchText) {
-    this.setState({searchText});
+    this.setState(state => ({ data: state.data.set('searchText', searchText) }));
     this.props.filter(searchText);
   }
 
@@ -24,7 +25,7 @@ class MovieSearch extends React.Component {
       <TextInput
         placeholder='Search movie by name'
         onChangeText={this._onChange.bind(this)}>
-        {this.state.searchText}
+        {this.state.data.get('searchText')}
       </TextInput>
     );
   }

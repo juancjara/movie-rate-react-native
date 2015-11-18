@@ -2,6 +2,7 @@
 
 import React from 'react-native';
 import Button from 'react-native-button';
+import {Map, List} from 'immutable';
 
 import MovieStore from '../stores/MovieStore';
 import MovieActions from '../actions/MovieActions';
@@ -28,9 +29,9 @@ class MovieList extends React.Component {
     this._onChange = this._onChange.bind(this);
     this.state  = {
       searchText: '',
-      movies : '',
+      movies : List(),
       dataSource: new  ListView.DataSource({
-        rowHasChanged: (row1, row2) => true
+        rowHasChanged: (row1, row2) => row1 !== row2
       }),
     };
   }
@@ -65,12 +66,13 @@ class MovieList extends React.Component {
   }
 
   updateListView(newRows) {
-    let matches = newRows.filter(({name}) => {
+    let matches = newRows.filter((movie) => {
+      let name = movie.get('name');
       return name.search(this.state.searchText) >= 0;
     });
     this.setState({
       movies: newRows,
-      dataSource: this.state.dataSource.cloneWithRows(matches),
+      dataSource: this.state.dataSource.cloneWithRows(matches.toJS()),
     });
   }
 
@@ -194,7 +196,7 @@ let styles = {
     marginLeft: 10,
   },
   separator: {
-    height: 2,
+
     backgroundColor: 'black',
   },
   container: {

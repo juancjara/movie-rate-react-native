@@ -82,7 +82,7 @@ class MovieReactNative extends React.Component {
   render() {
     return (
         <Navigator
-          initialRoute = {{index: 0}}
+          initialRoute = {{index: 1}}
           renderScene = {this._renderScene.bind(this)}/>
     );
   }

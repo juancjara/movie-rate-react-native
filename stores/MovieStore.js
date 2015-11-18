@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-import {Map, List,} from 'immutable';
+import Immutable from 'immutable';
 import FluxStore from './FluxStore';
 import {
   INIT_DATA,
@@ -13,12 +13,12 @@ class MovieStore extends FluxStore {
 
   constructor() {
     super();
-    this._movies = List();
+    this._movies = Immutable.List();
     this.subscribe(() => this._registerToActions.bind(this));
   }
 
   _loadInitialData({movies}) {
-    this._movies = List.fromJS(movies);
+    this._movies = Immutable.fromJS(movies);
   }
 
   _generateVote({movie}) {
@@ -26,13 +26,12 @@ class MovieStore extends FluxStore {
       .findIndex(m => m.get('name ')=== movie.name);
 
     this._movies = this._movies
-      .updateIn([idx, 'numVotes'], votes => votes++);
+      .updateIn([idx, 'numVotes'], votes => votes + 1);
     //TODO
     //save movie after update
   }
 
   _sendVotes() {
-
     this._movies = this._movies
       .map((movie) => {
         if (movie.get('selected')) {
